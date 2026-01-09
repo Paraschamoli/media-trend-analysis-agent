@@ -1,0 +1,328 @@
+# Media Trend Analysis and Monitoring Skill
+# AI-powered agent for tracking and analyzing emerging media trends, topics, and sentiment in real-time.
+
+# Basic Metadata
+id: media-trend-analysis-agent-v1
+name: media-trend-analysis-agent
+version: 1.0.0
+author: paras25619@gmail.com
+
+# Description
+description: |
+  An AI-powered media intelligence agent that tracks, analyzes, and reports on emerging trends,
+  viral topics, and public sentiment across digital platforms in real-time. Leverages Exa for
+  semantic search and Firecrawl for deep content extraction to provide comprehensive media
+  landscape analysis.
+
+# Tags and Modes
+tags:
+  - media-analysis
+  - trend-tracking
+  - sentiment-analysis
+  - real-time-monitoring
+  - viral-trends
+  - digital-platforms
+  - exa-search
+  - firecrawl
+
+input_modes:
+  - text/plain
+  - application/json
+
+output_modes:
+  - text/plain
+  - application/json
+  - text/markdown
+
+# Example Queries
+examples:
+  - "What are the top 5 emerging media trends in the technology sector this week?"
+  - "Analyze the sentiment and spread of the recent news about AI regulation."
+  - "Track the virality and key discussion points around the latest product launch from Company X."
+  - "Identify rising topics in political discourse across news and social media for the past 48 hours."
+  - "Provide a daily briefing on media trends related to climate change."
+
+# Detailed Capabilities
+capabilities_detail:
+  trend_analysis:
+    supported: true
+    methods:
+      - real_time_monitoring
+      - topic_clustering
+      - velocity_measurement
+      - cross_platform_correlation
+    platforms:
+      - news_websites
+      - social_media
+      - forums
+      - blogs
+    time_frame: "real_time_to_historical"
+
+  sentiment_analysis:
+    supported: true
+    aspects:
+      - overall_sentiment
+      - emotion_detection
+      - stance_identification
+      - controversy_detection
+    granularity:
+      - document_level
+      - entity_level
+      - topic_level
+
+  source_monitoring:
+    supported: true
+    analysis_types:
+      - source_credibility_scoring
+      - geographic_bias_detection
+      - political_leaning_estimation
+      - influence_network_mapping
+
+  report_generation:
+    supported: true
+    styles:
+      - executive_briefing
+      - detailed_analyst_report
+      - real_time_alert
+      - periodic_digest
+    sections:
+      - executive_summary
+      - key_trends
+      - sentiment_breakdown
+      - influential_sources
+      - velocity_analysis
+      - predictive_insights
+
+# Requirements
+requirements:
+  packages:
+    - agno>=0.0.26
+    - bindu>=0.0.8
+    - openai>=1.60.0
+    - python-dotenv>=1.0.1
+  system: []
+  min_memory_mb: 512
+  external_services:
+    - Exa Search API
+    - Firecrawl API
+    - OpenAI API or OpenRouter API
+
+# Performance Metrics
+performance:
+  avg_processing_time_ms: 2000
+  avg_time_per_source_ms: 300
+  max_concurrent_requests: 8
+  memory_per_request_mb: 512
+  timeout_seconds: 90
+  max_sources_per_query: 15
+  scalability: horizontal
+
+# Tool Restrictions
+allowed_tools:
+  - ExaTools
+  - FirecrawlTools
+  - Read
+  - Search
+  - Analyze
+  - Monitor
+  - Generate
+
+# Rich Documentation
+documentation:
+  overview: |
+    This agent specializes in real-time media intelligence, monitoring digital platforms to identify
+    emerging trends, analyze public sentiment, and track the spread of topics. It combines Exa's
+    semantic search capabilities with Firecrawl's content extraction to provide a deep, nuanced
+    understanding of the media landscape.
+
+  use_cases:
+    when_to_use:
+      - User requests analysis of current media trends or viral topics
+      - User needs sentiment analysis on a news event or public figure
+      - User wants to monitor brand or topic mentions across platforms
+      - User requires a briefing on emerging discourse in a specific domain
+      - User asks for tracking the spread and evolution of a narrative
+
+    when_not_to_use:
+      - Deep investigative research requiring historical context (use research agent)
+      - Simple Q&A without trend analysis (use general assistant)
+      - Fact-checking specific claims (use research agent)
+      - Mathematical or financial analysis (use specialized agents)
+      - Code generation or debugging (use programming agent)
+
+  input_structure: |
+    Accepts monitoring and analysis queries with optional specifications:
+
+    {
+      "query": "Topic, brand, or trend to monitor",
+      "analysis_type": "trend_analysis|sentiment_analysis|source_monitoring",
+      "time_frame": "realtime|last_24h|last_week|custom_range",
+      "platforms": ["news", "social_media", "all"],
+      "report_style": "executive|detailed|alert|digest",
+      "max_sources": 10
+    }
+
+    Query constraints:
+    - Max query length: 300 characters
+    - Max sources per query: 15
+    - Timeout: 90 seconds
+    - Language: English primary
+
+  output_format: |
+    Standard Media Analysis Report:
+    {
+      "success": true,
+      "report": {
+        "title": "Analysis of [Topic]",
+        "executive_summary": "Brief overview of findings...",
+        "key_trends": [
+          {
+            "trend": "Trend description",
+            "velocity": "high/medium/low",
+            "sentiment": "positive/neutral/negative/mixed",
+            "key_sources": ["Source 1", "Source 2"]
+          }
+        ],
+        "sentiment_breakdown": {
+          "positive_percentage": 45,
+          "neutral_percentage": 30,
+          "negative_percentage": 25,
+          "dominant_emotions": ["anticipation", "trust"]
+        },
+        "influential_sources": [
+          {
+            "source_name": "Source Name",
+            "url": "source_url",
+            "credibility_score": 0.85,
+            "reach_estimate": "high"
+          }
+        ],
+        "predictive_insights": "Potential developments and recommendations..."
+      },
+      "metadata": {
+        "query": "original_query",
+        "processing_time_ms": 3500,
+        "sources_analyzed": 12,
+        "time_frame_covered": "last_24_hours",
+        "confidence_score": 0.87
+      }
+    }
+
+  error_handling:
+    - "No relevant trends found: Returns analysis of quiet period with context"
+    - "API rate limits: Queues requests or suggests adjusting time frame"
+    - "Unclear query: Asks for clarification on topic or scope"
+    - "Insufficient data: Suggests broadening query or changing time frame"
+    - "Conflicting sentiment: Presents breakdown and analyzes contributing factors"
+
+  examples:
+    - title: "Technology Sector Trend Briefing"
+      input:
+        query: "top emerging media trends in technology"
+        time_frame: "last_week"
+        report_style: "executive"
+      output:
+        success: true
+        report:
+          title: "Weekly Tech Media Trends Digest"
+          executive_summary: "This week's discourse centered on AI ethics and quantum computing milestones..."
+          key_trends: [...]
+        metadata:
+          processing_time_ms: 4200
+          sources_analyzed: 14
+
+    - title: "Brand Sentiment Alert"
+      input:
+        query: "Company X product launch sentiment"
+        analysis_type: "sentiment_analysis"
+        time_frame: "last_48h"
+        platforms: ["news", "social_media"]
+      output:
+        success: true
+        report:
+          title: "Sentiment Analysis: Company X Product Launch"
+          executive_summary: "Initial reception is positive with notable critique on pricing..."
+          sentiment_breakdown: {...}
+        metadata:
+          processing_time_ms: 3100
+          sources_analyzed: 18
+
+  best_practices:
+    for_developers:
+      - "Use specific time frames ('last_48h') for more actionable real-time analysis"
+      - "Leverage platform filters to focus on relevant media types"
+      - "Combine trend detection with sentiment for holistic view"
+      - "Cache frequent baseline queries to track trend velocity"
+      - "Monitor API usage for Exa and Firecrawl services"
+
+    for_orchestrators:
+      - "Route real-time media monitoring queries to this agent"
+      - "Chain with research agent for deep dives into identified trends"
+      - "Set appropriate timeouts based on query complexity"
+      - "Use for proactive alerting on sentiment shifts"
+      - "Consider data freshness requirements when configuring"
+
+  installation: |
+    Required packages:
+    pip install agno bindu openai python-dotenv
+
+    Environment variables:
+    OPENAI_API_KEY=your_openai_api_key
+    OPENROUTER_API_KEY=your_openrouter_api_key  # Alternative to OpenAI
+    EXA_API_KEY=your_exa_api_key                # Required for search
+    FIRECRAWL_API_KEY=your_firecrawl_api_key    # Required for content extraction
+
+  versioning:
+    - version: "1.0.0"
+      date: "2025-01-21"
+      changes: "Initial release with Exa and Firecrawl integration for real-time media analysis"
+
+# Assessment fields for skill negotiation
+assessment:
+  keywords:
+    - media
+    - trend
+    - analysis
+    - monitor
+    - track
+    - sentiment
+    - viral
+    - topics
+    - real-time
+    - briefing
+    - alert
+    - exa
+    - firecrawl
+
+  specializations:
+    - domain: technology_media
+      confidence_boost: 0.3
+    - domain: brand_monitoring
+      confidence_boost: 0.3
+    - domain: political_discourse
+      confidence_boost: 0.2
+    - domain: consumer_sentiment
+      confidence_boost: 0.2
+
+  anti_patterns:
+    - "historical research"
+    - "fact checking"
+    - "investigative journalism"
+    - "code generation"
+    - "mathematical calculation"
+    - "personal opinion"
+    - "theoretical science"
+
+  complexity_indicators:
+    simple:
+      - "current sentiment"
+      - "trending now"
+      - "basic monitoring"
+    medium:
+      - "multi-platform analysis"
+      - "sentiment over time"
+      - "identify key sources"
+    complex:
+      - "predictive trend analysis"
+      - "narrative spread tracking"
+      - "cross-correlation of multiple topics"

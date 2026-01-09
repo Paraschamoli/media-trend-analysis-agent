@@ -1,0 +1,53 @@
+{
+  "author": "paras25619@gmail.com",
+  "name": "media-trend-analysis-agent",
+  "description": "An AI agent that tracks and analyzes emerging media trends, topics, and sentiment across digital platforms in real time using Exa and Firecrawl.",
+  "version": "1.0.0",
+  "recreate_keys": false,
+  "skills": [
+    {
+      "name": "media-trend-analysis-agent",
+      "path": "skills/agent_skill"
+    }
+  ],
+  "capabilities": {},
+  "agent_trust": "low",
+  "debug_mode": true,
+  "debug_level": 2,
+  "deployment": {
+    "url": "http://0.0.0.0:3773",
+    "expose": true,
+    "protocol_version": "1.0.0",
+    "proxy_urls": ["0.0.0.0"],
+    "cors_origins": ["*"]
+  },
+  "storage": {
+    "type": "memory"
+  },
+  "scheduler": {
+    "type": "memory"
+  },
+  "num_history_sessions": 5,
+  "environment_variables": [
+    {
+      "key": "OPENAI_API_KEY",
+      "description": "OpenAI API key for LLM calls",
+      "required": false
+    },
+    {
+      "key": "OPENROUTER_API_KEY",
+      "description": "OpenRouter API key for LLM calls",
+      "required": false
+    },
+    {
+      "key": "EXA_API_KEY",
+      "description": "Exa API key for media search and trend analysis (required)",
+      "required": true
+    },
+    {
+      "key": "FIRECRAWL_API_KEY",
+      "description": "Firecrawl API key for content scraping when search results are insufficient (required)",
+      "required": true
+    }
+  ]
+}
