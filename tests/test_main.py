@@ -1,5 +1,6 @@
-import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
+
+import pytest
 
 from media_trend_analysis_agent.main import handler
 
@@ -15,8 +16,10 @@ async def test_handler_returns_response():
     mock_response.status = "COMPLETED"
 
     # Mock _initialized to skip initialization and run_agent to return our mock
-    with patch("media_trend_analysis_agent.main._initialized", True), \
-         patch("media_trend_analysis_agent.main.run_agent", new_callable=AsyncMock, return_value=mock_response):
+    with (
+        patch("media_trend_analysis_agent.main._initialized", True),
+        patch("media_trend_analysis_agent.main.run_agent", new_callable=AsyncMock, return_value=mock_response),
+    ):
         result = await handler(messages)
 
     # Verify we get a result back
@@ -36,8 +39,12 @@ async def test_handler_with_multiple_messages():
     mock_response = MagicMock()
     mock_response.run_id = "test-run-id-2"
 
-    with patch("media_trend_analysis_agent.main._initialized", True), \
-         patch("media_trend_analysis_agent.main.run_agent", new_callable=AsyncMock, return_value=mock_response) as mock_run:
+    with (
+        patch("media_trend_analysis_agent.main._initialized", True),
+        patch(
+            "media_trend_analysis_agent.main.run_agent", new_callable=AsyncMock, return_value=mock_response
+        ) as mock_run,
+    ):
         result = await handler(messages)
 
     # Verify run_agent was called
@@ -49,16 +56,26 @@ async def test_handler_with_multiple_messages():
 @pytest.mark.asyncio
 async def test_handler_initialization():
     """Test that handler initializes on first call."""
-    messages = [{"role": "user", "content": "Test"}]
-
     mock_response = MagicMock()
+    mock_response.run_id = "test-init-run-id"
+    mock_response.status = "COMPLETED"
 
     # Start with _initialized as False to test initialization path
-    with patch("media_trend_analysis_agent.main._initialized", False), \
-         patch("media_trend_analysis_agent.main.initialize_all", new_callable=AsyncMock) as mock_init, \
-         patch("media_trend_analysis_agent.main.run_agent", new_callable=AsyncMock, return_value=mock_response), \
-         patch("media_trend_analysis_agent.main._init_lock"):
-        # Note: This test verifies the initialization logic exists
-        # In practice, the lock and global state make this harder to test
-        # You may want to refactor for better testability
-        pass
+    with (
+        patch("media_trend_analysis_agent.main._initialized", False),
+        patch("media_trend_analysis_agent.main.initialize_agent", new_callable=AsyncMock) as mock_init,
+        patch("media_trend_analysis_agent.main.run_agent", new_callable=AsyncMock, return_value=mock_response),
+        patch("media_trend_analysis_agent.main._init_lock"),
+    ):
+        # Call handler with test messages
+        test_messages = [{"role": "user", "content": "Test initialization"}]
+        result = await handler(test_messages)
+
+        # Verify initialization was called
+        mock_init.assert_called_once()
+
+        # Verify run_agent was called with the correct messages
+        mock_response.assert_not_called()  # MagicMock check
+        assert result is not None
+        assert result.run_id == "test-init-run-id"
+        assert result.status == "COMPLETED"

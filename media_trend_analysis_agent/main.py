@@ -104,7 +104,7 @@ async def initialize_agent() -> None:
     if not exa_api_key:
         print("⚠️  EXA_API_KEY is required. Get it from: https://exa.ai")
         raise ExaKeyError()
-    
+
     if not firecrawl_api_key:
         print("⚠️  FIRECRAWL_API_KEY is required. Get it from: https://firecrawl.dev")
         raise FirecrawlKeyError()
