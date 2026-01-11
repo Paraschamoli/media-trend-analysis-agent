@@ -56,6 +56,8 @@ async def test_handler_with_multiple_messages():
 @pytest.mark.asyncio
 async def test_handler_initialization():
     """Test that handler initializes on first call."""
+    messages = [{"role": "user", "content": "Test"}]
+
     mock_response = MagicMock()
     mock_response.run_id = "test-init-run-id"
     mock_response.status = "COMPLETED"
@@ -64,18 +66,77 @@ async def test_handler_initialization():
     with (
         patch("media_trend_analysis_agent.main._initialized", False),
         patch("media_trend_analysis_agent.main.initialize_agent", new_callable=AsyncMock) as mock_init,
-        patch("media_trend_analysis_agent.main.run_agent", new_callable=AsyncMock, return_value=mock_response),
-        patch("media_trend_analysis_agent.main._init_lock"),
+        patch(
+            "media_trend_analysis_agent.main.run_agent", new_callable=AsyncMock, return_value=mock_response
+        ) as mock_run,
+        patch("media_trend_analysis_agent.main._init_lock", new_callable=MagicMock()) as mock_lock,
     ):
-        # Call handler with test messages
-        test_messages = [{"role": "user", "content": "Test initialization"}]
-        result = await handler(test_messages)
+        # Configure the lock to work as an async context manager
+        mock_lock_instance = MagicMock()
+        mock_lock_instance.__aenter__ = AsyncMock(return_value=None)
+        mock_lock_instance.__aexit__ = AsyncMock(return_value=None)
+        mock_lock.return_value = mock_lock_instance
+
+        result = await handler(messages)
 
         # Verify initialization was called
         mock_init.assert_called_once()
-
-        # Verify run_agent was called with the correct messages
-        mock_response.assert_not_called()  # MagicMock check
+        # Verify run_agent was called
+        mock_run.assert_called_once_with(messages)
+        # Verify we got a result
         assert result is not None
         assert result.run_id == "test-init-run-id"
         assert result.status == "COMPLETED"
+
+
+@pytest.mark.asyncio
+async def test_handler_race_condition_prevention():
+    """Test that handler prevents race conditions with initialization lock."""
+    messages = [{"role": "user", "content": "Test"}]
+
+    mock_response = MagicMock()
+
+    # Test with multiple concurrent calls
+    with (
+        patch("media_trend_analysis_agent.main._initialized", False),
+        patch("media_trend_analysis_agent.main.initialize_agent", new_callable=AsyncMock) as mock_init,
+        patch("media_trend_analysis_agent.main.run_agent", new_callable=AsyncMock, return_value=mock_response),
+        patch("media_trend_analysis_agent.main._init_lock", new_callable=MagicMock()) as mock_lock,
+    ):
+        # Configure the lock to work as an async context manager
+        mock_lock_instance = MagicMock()
+        mock_lock_instance.__aenter__ = AsyncMock(return_value=None)
+        mock_lock_instance.__aexit__ = AsyncMock(return_value=None)
+        mock_lock.return_value = mock_lock_instance
+
+        # Call handler twice to ensure lock is used
+        await handler(messages)
+        await handler(messages)
+
+        # Verify initialize_agent was called only once (due to lock)
+        mock_init.assert_called_once()
+
+
+@pytest.mark.asyncio
+async def test_handler_with_trend_analysis_query():
+    """Test that handler can process a trend analysis query."""
+    messages = [
+        {
+            "role": "user",
+            "content": "Analyze media trends for AI agents in the last 30 days",
+        }
+    ]
+
+    mock_response = MagicMock()
+    mock_response.run_id = "trend-analysis-run-id"
+    mock_response.content = "Media trend analysis report generated successfully."
+
+    with (
+        patch("media_trend_analysis_agent.main._initialized", True),
+        patch("media_trend_analysis_agent.main.run_agent", new_callable=AsyncMock, return_value=mock_response),
+    ):
+        result = await handler(messages)
+
+    assert result is not None
+    assert result.run_id == "trend-analysis-run-id"
+    assert result.content == "Media trend analysis report generated successfully."

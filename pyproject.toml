@@ -1,21 +1,23 @@
 [project]
 name = "media-trend-analysis-agent"
-version = "0.0.1"
+version = "0.1.0"
 description = "An AI agent that tracks and analyzes emerging media trends, topics, and sentiment across digital platforms in real time using Exa and Firecrawl."
 authors = [{ name = "Paras Chamoli", email = "paras25619@gmail.com" }]
 readme = "README.md"
 keywords = ['python', 'media-analysis', 'trend-tracking', 'exa', 'firecrawl', 'ai']
 requires-python = ">=3.12,<3.13"
 dependencies = [
-    "bindu==2025.49.3",
+    "bindu==2026.1.7",
     "agno>=2.2.0",
-
+    "fastmcp>=2.11.0",
     "requests>=2.31.0",
     "rich>=13.0.0",
     "openai>=2.11.0",
     "exa-py>=2.0.0",
     "firecrawl-py>=1.0.0",
     "python-dotenv>=1.0.1",
+    "sqlalchemy>=2.0.45",
+    "mem0ai>=1.0.1",
 ]
 classifiers = [
     "Intended Audience :: Developers",

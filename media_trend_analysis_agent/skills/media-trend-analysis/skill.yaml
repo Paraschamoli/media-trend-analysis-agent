@@ -96,10 +96,12 @@ capabilities_detail:
 # Requirements
 requirements:
   packages:
-    - agno>=0.0.26
-    - bindu>=0.0.8
-    - openai>=1.60.0
+    - agno>=2.2.0
+    - bindu>=2026.1.7
+    - openai>=2.11.0
     - python-dotenv>=1.0.1
+    - exa-py>=2.0.0
+    - firecrawl-py>=1.0.0
   system: []
   min_memory_mb: 512
   external_services:
@@ -274,7 +276,7 @@ documentation:
 
   versioning:
     - version: "1.0.0"
-      date: "2025-01-21"
+      date: "2026-01-11"
       changes: "Initial release with Exa and Firecrawl integration for real-time media analysis"
 
 # Assessment fields for skill negotiation

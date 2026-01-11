@@ -11,18 +11,16 @@
 
 from media_trend_analysis_agent.__version__ import __version__
 from media_trend_analysis_agent.main import (
+    cleanup,
     handler,
     initialize_agent,
-    # initialize_all,
-    # initialize_mcp_tools,
     main,
 )
 
 __all__ = [
     "__version__",
+    "cleanup",
     "handler",
     "initialize_agent",
-    # "initialize_all",
-    # "initialize_mcp_tools",
     "main",
 ]

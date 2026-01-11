@@ -14,6 +14,7 @@ import asyncio
 import json
 import os
 import sys
+import traceback
 from datetime import datetime, timedelta
 from pathlib import Path
 from textwrap import dedent
@@ -50,10 +51,6 @@ class FirecrawlKeyError(ValueError):
     """Firecrawl API key is missing."""
 
 
-class AgentNotReadyError(RuntimeError):
-    """Agent is not initialized."""
-
-
 def load_config() -> dict:
     """Load agent configuration from project root."""
     # Try multiple possible locations for agent_config.json
@@ -78,15 +75,18 @@ def load_config() -> dict:
         "description": "AI Media Trend Analysis Agent",
         "version": "1.0.0",
         "deployment": {
-            "url": "http://0.0.0.0:3773",
+            "url": "http://127.0.0.1:3773",
             "expose": True,
             "protocol_version": "1.0.0",
+            "proxy_urls": ["127.0.0.1"],
+            "cors_origins": ["*"],
         },
         "environment_variables": [
             {"key": "OPENAI_API_KEY", "description": "OpenAI API key", "required": False},
             {"key": "OPENROUTER_API_KEY", "description": "OpenRouter API key", "required": False},
             {"key": "EXA_API_KEY", "description": "Exa API key", "required": True},
             {"key": "FIRECRAWL_API_KEY", "description": "Firecrawl API key", "required": True},
+            {"key": "MODEL_NAME", "description": "Model ID for OpenRouter", "required": False},
         ],
     }
 
@@ -100,36 +100,47 @@ async def initialize_agent() -> None:
     openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
     exa_api_key = os.getenv("EXA_API_KEY")
     firecrawl_api_key = os.getenv("FIRECRAWL_API_KEY")
+    model_name = os.getenv("MODEL_NAME", "openai/gpt-4o")
+    days_back = int(os.getenv("DAYS_BACK", "30"))
 
     if not exa_api_key:
-        print("⚠️  EXA_API_KEY is required. Get it from: https://exa.ai")
-        raise ExaKeyError()
+        error_msg = "EXA_API_KEY is required. Get it from: https://exa.ai"
+        raise ExaKeyError(error_msg)
 
     if not firecrawl_api_key:
-        print("⚠️  FIRECRAWL_API_KEY is required. Get it from: https://firecrawl.dev")
-        raise FirecrawlKeyError()
+        error_msg = "FIRECRAWL_API_KEY is required. Get it from: https://firecrawl.dev"
+        raise FirecrawlKeyError(error_msg)
 
     # Model selection logic
     if openai_api_key:
         model = OpenAIChat(id="gpt-4o", api_key=openai_api_key)
         print("✅ Using OpenAI GPT-4o")
     elif openrouter_api_key:
-        model = OpenRouter(id="openai/gpt-4o", api_key=openrouter_api_key)
-        print("✅ Using OpenRouter GPT-4o")
+        model = OpenRouter(
+            id=model_name,
+            api_key=openrouter_api_key,
+            cache_response=True,
+            supports_native_structured_outputs=True,
+        )
+        print(f"✅ Using OpenRouter model: {model_name}")
     else:
-        # Default model if no key provided
-        model = OpenAIChat(id="gpt-4o-mini")
-        print("⚠️  No LLM API key provided - using default model")
+        # Define error message separately to avoid TRY003
+        error_msg = (
+            "No LLM API key provided. Set OPENAI_API_KEY or OPENROUTER_API_KEY environment variable.\n"
+            "For OpenRouter: https://openrouter.ai/keys\n"
+            "For OpenAI: https://platform.openai.com/api-keys"
+        )
+        raise ValueError(error_msg)
 
-    # Initialize tools with basic configuration
+    # Initialize tools with proper configuration
     exa_tools = ExaTools(
         api_key=exa_api_key,
+        start_published_date=calculate_start_date(days_back),
+        type="keyword",
     )
 
     firecrawl_tools = FirecrawlTools(
         api_key=firecrawl_api_key,
-        # Note: The example shows scrape=True but actual API might differ
-        # Using basic initialization to avoid errors
     )
 
     # Create the media trend analysis agent
@@ -188,7 +199,6 @@ async def initialize_agent() -> None:
         """),
         add_datetime_to_context=True,
         markdown=True,
-        stream_events=True,
     )
     print("✅ Media Trend Analysis Agent initialized")
 
@@ -197,7 +207,8 @@ async def run_agent(messages: list[dict[str, str]]) -> Any:
     """Run the agent with the given messages."""
     global agent
     if not agent:
-        raise AgentNotReadyError()
+        error_msg = "Agent not initialized"
+        raise RuntimeError(error_msg)
 
     # Run the agent and get response
     response = await agent.arun(messages)
@@ -218,6 +229,11 @@ async def handler(messages: list[dict[str, str]]) -> Any:
     # Run the async agent
     result = await run_agent(messages)
     return result
+
+
+async def cleanup() -> None:
+    """Clean up any resources."""
+    print("🧹 Cleaning up Media Trend Analysis Agent resources...")
 
 
 def main():
@@ -248,10 +264,16 @@ def main():
         help="Firecrawl API key (env: FIRECRAWL_API_KEY)",
     )
     parser.add_argument(
+        "--model",
+        type=str,
+        default=os.getenv("MODEL_NAME", "openai/gpt-4o"),
+        help="Model ID for OpenRouter (env: MODEL_NAME)",
+    )
+    parser.add_argument(
         "--days",
         type=int,
-        default=30,
-        help="Number of days to look back for trend analysis (default: 30)",
+        default=int(os.getenv("DAYS_BACK", "30")),
+        help="Number of days to look back for trend analysis (env: DAYS_BACK, default: 30)",
     )
     args = parser.parse_args()
 
@@ -264,6 +286,9 @@ def main():
         os.environ["EXA_API_KEY"] = args.exa_api_key
     if args.firecrawl_api_key:
         os.environ["FIRECRAWL_API_KEY"] = args.firecrawl_api_key
+    if args.model:
+        os.environ["MODEL_NAME"] = args.model
+    os.environ["DAYS_BACK"] = str(args.days)
 
     print("📊 Media Trend Analysis Agent - AI Media Intelligence")
     print(f"📈 Analyzing trends from the last {args.days} days")
@@ -275,13 +300,17 @@ def main():
     try:
         # Bindufy and start the agent server
         print("🚀 Starting Bindu Media Trend Analysis Agent server...")
-        print(f"🌐 Server will run on: {config.get('deployment', {}).get('url', 'http://0.0.0.0:3773')}")
+        print(f"🌐 Server will run on: {config.get('deployment', {}).get('url', 'http://127.0.0.1:3773')}")
         bindufy(config, handler)
     except KeyboardInterrupt:
         print("\n🛑 Agent stopped")
     except Exception as e:
         print(f"❌ Error: {e}")
+        traceback.print_exc()
         sys.exit(1)
+    finally:
+        # Cleanup on exit
+        asyncio.run(cleanup())
 
 
 if __name__ == "__main__":

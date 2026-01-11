@@ -2,12 +2,12 @@
   <img src="https://raw.githubusercontent.com/getbindu/create-bindu-agent/refs/heads/main/assets/light.svg" alt="bindu Logo" width="200">
 </p>
 
-<h1 align="center">media-trend-analysis-agent</h1>
-<h3 align="center">An AI agent that tracks and analyzes emerging media trends, topics, and sentiment across digital platforms in real time.</h3>
+<h1 align="center">Media Trend Analysis Agent</h1>
+<h3 align="center">Real-time Media Intelligence & Trend Tracking AI</h3>
 
 <p align="center">
-  <strong>An AI agent that tracks and analyzes emerging media trends, topics, and sentiment across digital platforms in real time.</strong><br/>
-  An AI agent that tracks and analyzes emerging media trends, topics, and sentiment across digital platforms in real time.
+  <strong>Track, analyze, and predict emerging media trends across digital platforms in real-time</strong><br/>
+  AI-powered media intelligence with Exa search and Firecrawl content extraction
 </p>
 
 <p align="center">
@@ -24,11 +24,28 @@
 
 ---
 
-## 💡 Why This Exists
+## 🎯 What is Media Trend Analysis Agent?
 
-**Stop endless scrolling.** This AI agent understands what you *actually* want:
+An AI-powered media intelligence agent that tracks, analyzes, and reports on emerging trends, viral topics, and public sentiment across digital platforms in real-time. Think of it as having a team of media analysts available 24/7.
 
-**Perfect for:** An AI agent that tracks and analyzes emerging media trends, topics, and sentiment across digital platforms in real time.
+### Key Features
+*   **🔍 Real-time Monitoring** - Track emerging trends across news, social media, blogs
+*   **📊 Sentiment Analysis** - Measure public sentiment and emotional responses
+*   **🚀 Velocity Tracking** - Identify topics gaining momentum
+*   **🎯 Source Intelligence** - Analyze credibility and influence of media sources
+*   **📈 Predictive Insights** - Forecast trend developments based on current patterns
+*   **⚡ Exa & Firecrawl** - Semantic search combined with deep content extraction
+
+### Built-in Tools
+*   **ExaTools** - Semantic search across digital platforms
+*   **FirecrawlTools** - Deep content extraction when needed
+*   **Intelligent Filtering** - Date-based searches with relevance scoring
+
+### Analysis Methodology
+1.  **Search Phase** - Scan multiple platforms using semantic search
+2.  **Extraction Phase** - Extract content when search results are insufficient
+3.  **Analysis Phase** - Identify trends, sentiment, and key sources
+4.  **Reporting Phase** - Generate actionable insights and predictions
 
 ---
 
@@ -37,259 +54,367 @@
 
 ---
 
-## 📚 Quick Links
+## 🚀 Quick Start
 
-- 📖 **[Full Documentation](https://Paraschamoli.github.io/media-trend-analysis-agent/)**
-- 💻 **[GitHub Repository](https://github.com/Paraschamoli/media-trend-analysis-agent/)**
-- 🐛 **[Report Issues](https://github.com/Paraschamoli/media-trend-analysis-agent/issues)**
-- 💬 **[Join Discord](https://discord.gg/3w5zuYUuwt)**
-- 🌐 **[Agent Directory](https://bindus.directory)**
-
-<br/>
-
-## ⚡ Quick Start - Deploy to bindus.directory in 5 Minutes
-
-This guide will help you deploy your agent to [bindus.directory](https://bindus.directory) where it becomes discoverable worldwide and can collaborate with other agents. **GitHub Actions will automatically build, containerize, and register your agent.**
-
-### Prerequisites
-
-- Python 3.10+
-- [uv](https://github.com/astral-sh/uv) (fast Python package installer)
-- [GitHub CLI](https://cli.github.com/) (`gh`)
-- GitHub account
-- Docker Hub account (free)
-
----
-
-### 1️⃣ Local Setup & Configuration
+### 1. Clone and Setup
 
 ```bash
-# Clone and setup the project
+# Clone the repository
+git clone https://github.com/Paraschamoli/media-trend-analysis-agent.git
 cd media-trend-analysis-agent
-uv venv --python 3.12.9
-source .venv/bin/activate
+
+# Set up virtual environment with uv
+uv venv --python 3.12
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Install dependencies
 uv sync
+```
 
-# Configure API keys
+### 2. Configure Environment
+
+```bash
+# Copy environment template
 cp .env.example .env
+
+# Edit .env and add your API keys:
+# OPENAI_API_KEY=sk-...      # For OpenAI GPT-4o
+# OPENROUTER_API_KEY=sk-...  # For OpenRouter (cheaper alternative)
+# EXA_API_KEY=sk-...         # Required: Get from https://exa.ai
+# FIRECRAWL_API_KEY=sk-...   # Required: Get from https://firecrawl.dev
 ```
 
-Edit `.env` and add your keys:
-
-| Key | Get It From | Free Tier? |
-|-----|-------------|------------|
-| `OPENROUTER_API_KEY` | [OpenRouter](https://openrouter.ai/keys) | ✅ Yes |
-| `MEM0_API_KEY` | [Mem0 Dashboard](https://app.mem0.ai/dashboard/api-keys) | ✅ Yes |
-
----
-
-### 2️⃣ Setup GitHub Authentication
-
-Authenticate with GitHub CLI:
+### 3. Run Locally
 
 ```bash
-# Check if you're already logged in
-gh auth status
+# Start the media trend analysis agent
+python media_trend_analysis_agent/main.py
 
-# If not logged in, authenticate with GitHub
-gh auth login
+# Or using uv
+uv run python media_trend_analysis_agent/main.py
 ```
 
-Follow the prompts:
-1. Select **GitHub.com**
-2. Choose **SSH** as your preferred protocol
-3. Authenticate via your browser or token
-
----
-
-### 3️⃣ Create GitHub Repository
-
-# Initialize git repository and commit your code
-git init -b main
-git add .
-git commit -m "Initial commit"
-
-# Create repository on GitHub and push (replace with your GitHub username)
-gh repo create Paraschamoli/media-trend-analysis-agent --public --source=. --remote=origin --push
-```
-
-**Alternative: Manual creation**
-1. Create repository at https://github.com/new
-2. Don't initialize with README (you already have one)
-3. Then run:
-```bash
-git remote add origin https://github.com/Paraschamoli/media-trend-analysis-agent.git
-git push -u origin main
-
----
-
-### 4️⃣ Register on bindus.directory
-
-1. **Login** to [bindus.directory](https://bindus.directory)
-2. **Grab your API key** from the dashboard
-3. **Get Docker Hub token** from [Docker Hub Security Settings](https://hub.docker.com/settings/security)
-
----
-
-### 5️⃣ Configure GitHub Secrets for Auto-Deployment
-
-Set up secrets so GitHub Actions can automatically deploy your agent:
-
-![GitHub Secrets Setup](../assets/git_secret.png)
+### 4. Test with Docker
 
 ```bash
-gh secret set BINDU_API_TOKEN --body "<your-bindus-api-key>"
-gh secret set DOCKERHUB_TOKEN --body "<your-dockerhub-token>"
+# Build and run with Docker Compose
+docker-compose up --build
+
+# Access at: http://localhost:3773
 ```
 
 ---
 
-### 6️⃣ Deploy! 🚀
+## 🔧 Configuration
 
-**Push to trigger automatic deployment:**
+### Environment Variables
+Create a `.env` file:
 
-```bash
-git push origin main
+```env
+# Required APIs
+EXA_API_KEY=sk-...           # Required: https://exa.ai
+FIRECRAWL_API_KEY=sk-...     # Required: https://firecrawl.dev
+
+# Choose ONE LLM provider
+OPENAI_API_KEY=sk-...        # OpenAI API key
+OPENROUTER_API_KEY=sk-...    # OpenRouter API key (alternative)
+
+# Optional configuration
+MODEL_NAME=openai/gpt-4o     # Model ID for OpenRouter
+DAYS_BACK=30                 # Days to look back for analysis
+MEM0_API_KEY=sk-...          # Optional: For memory operations
 ```
 
-**What happens automatically:**
-1. ✅ GitHub Actions builds your agent
-2. ✅ Creates a Docker container
-3. ✅ Pushes to Docker Hub
-4. ✅ Registers on bindus.directory
-5. ✅ Your agent is now live and discoverable!
-
-**That's it!** 🎉 Your agent is now part of the Internet of Agents.
+### Port Configuration
+Default port: `3773` (can be changed in `agent_config.json`)
 
 ---
 
 ## 💡 Usage Examples
 
-Try these queries:
-
-```python
-# Natural language search
-An AI agent that tracks and analyzes emerging media trends, topics, and sentiment across digital platforms in real time.
-```
-
----
-
-## 🛠️ Development Setup
-
-### Running Tests
+### Via HTTP API
 
 ```bash
-make test              # Run all tests
-make test-cov          # With coverage report
+curl -X POST http://localhost:3773/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+    "messages": [
+      {
+        "role": "user",
+        "content": "Analyze media trends for artificial intelligence regulation in the last 30 days. Focus on sentiment analysis and identify key influencers."
+      }
+    ]
+  }'
 ```
 
-### Code Quality
+### Sample Analysis Queries
 
-```bash
-make format            # Format code
-make lint              # Run linters
-make check             # Format + lint + test
+```text
+"What are the top 5 emerging media trends in the technology sector this week?"
+"Analyze sentiment around the recent product launch from Company X across news and social media."
+"Track the virality and key discussion points about climate policy changes in the last 48 hours."
+"Provide a daily briefing on media trends related to cryptocurrency and blockchain."
 ```
 
-### Pre-commit Hooks
+### Expected Output Format
 
-Fix formatting issues before committing:
+```markdown
+# Media Trend Analysis Report
 
-```bash
-uv run pre-commit run -a
+## Executive Summary
+Brief overview of findings and key metrics...
+
+## Trend Analysis
+### Volume Metrics
+- Peak discussion periods: Last 24 hours
+- Growth rate: 45% increase week-over-week
+
+## Source Analysis
+### Top Sources
+1. TechCrunch - 25% of coverage
+2. The Verge - 18% of coverage
+
+## Actionable Insights
+1. AI Regulation Sentiment Shift
+   - Evidence: 60% positive sentiment in last week vs 40% previously
+   - Recommended action: Monitor regulatory announcement impact
+
+## Future Predictions
+1. Increased regulatory scrutiny expected in Q3
+   - Supporting evidence: Multiple government sources indicating upcoming reviews
+
+## References
+- TechCrunch: [article_url] - AI Regulation Overview
+- The Verge: [article_url] - Industry Reactions
 ```
 
 ---
 
 ## 🐳 Docker Deployment
 
-### Local Docker
+### Quick Docker Setup
 
 ```bash
-# Build and run
-docker-compose up --build
+# Build the image
+docker build -t media-trend-analysis-agent .
 
-# Production mode
-docker-compose -f docker-compose.prod.yml up
+# Run container
+docker run -d \
+  -p 3773:3773 \
+  -e EXA_API_KEY=your_exa_key \
+  -e FIRECRAWL_API_KEY=your_firecrawl_key \
+  -e OPENAI_API_KEY=your_openai_key \
+  --name media-trend-agent \
+  media-trend-analysis-agent
+
+# Check logs
+docker logs -f media-trend-agent
 ```
 
-### Docker Hub Auto-Deploy
+### Docker Compose (Recommended)
 
-Enable automatic Docker image publishing:
+`docker-compose.yml`
 
-1. Go to **Settings → Secrets → Actions**
-2. Add secret: `DOCKERHUB_TOKEN` (get from [Docker Hub](https://hub.docker.com/settings/security))
-3. Push to `main` → Image auto-builds and publishes 🚀
+```yaml
+version: '3.8'
+services:
+  media-trend-agent:
+    build: .
+    ports:
+      - "3773:3773"
+    environment:
+      - EXA_API_KEY=${EXA_API_KEY}
+      - FIRECRAWL_API_KEY=${FIRECRAWL_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+    restart: unless-stopped
+```
+
+Run with Compose:
+
+```bash
+# Start with compose
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+```
 
 ---
 
-## 🏗️ Project Structure
+## 📁 Project Structure
 
-```
+```text
 media-trend-analysis-agent/
-├── media_trend_analysis_agent/    # Main agent code
-│   ├── skills/             # Agent capabilities
-│   │   └── media_trend_analysis_agent/ # media-trend-analysis-agent skill
-│   └── __init__.py
-├── tests/                  # Test suite
-├── docs/                   # Documentation
-├── .env.example            # Environment template
-├── docker-compose.yml      # Docker setup
-└── pyproject.toml          # Dependencies
+├── media_trend_analysis_agent/
+│   ├── skills/
+│   │   └── media-trend-analysis/
+│   │       ├── skill.yaml          # Skill configuration
+│   │       └── __init__.py
+│   ├── __init__.py
+│   └── main.py                     # Agent entry point
+├── agent_config.json               # Bindu agent configuration
+├── pyproject.toml                  # Python dependencies
+├── Dockerfile                      # Multi-stage Docker build
+├── docker-compose.yml              # Docker Compose setup
+├── README.md                       # This documentation
+├── .env.example                    # Environment template
+└── uv.lock                         # Dependency lock file
 ```
 
-
-<br/>
-
-## 🌟 Contributing
-
-We love contributions! Here's how to get started:
-
-1. **Fork** the repository
-2. **Create** a feature branch: `git checkout -b feature/amazing-feature`
-3. **Commit** your changes: `git commit -m 'Add amazing feature'`
-4. **Push** to the branch: `git push origin feature/amazing-feature`
-5. **Open** a Pull Request
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
-
 ---
 
-## 📝 License
+## 🔌 API Reference
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 🙏 Acknowledgments
-
-**Built with [Bindu Agent Framework](https://github.com/getbindu/bindu)**
-
-- 🌐 **A2A, AP2, X402 protocols** for Internet of Agents communication
-- ⚡ **Zero-config setup** - from idea to production in minutes
-- 🛠️ **Production-ready** out of the box
-
-### Want to Build Your Own Agent?
+### Health Check
 
 ```bash
-# Create a new agent in 2 minutes
-uvx cookiecutter https://github.com/getbindu/create-bindu-agent.git
+GET http://localhost:3773/health
+```
+
+Response:
+```json
+{"status": "healthy", "agent": "Media Trend Analysis Agent"}
+```
+
+### Chat Endpoint
+
+```bash
+POST http://localhost:3773/chat
+Content-Type: application/json
+
+{
+  "messages": [
+    {"role": "user", "content": "Your trend analysis query here"}
+  ]
+}
 ```
 
 ---
 
-<p align="center">
-  <strong>Built with 💛 by the team from Amsterdam 🌷</strong>
-</p>
+## 🧪 Testing
+
+### Local Testing
+
+```bash
+# Install test dependencies
+uv sync --group dev
+
+# Run tests
+pytest tests/
+
+# Test with specific API keys
+EXA_API_KEY=test_key FIRECRAWL_API_KEY=test_key python -m pytest
+```
+
+### Integration Test
+
+```bash
+# Start agent
+python media_trend_analysis_agent/main.py &
+
+# Test API endpoint
+curl -X POST http://localhost:3773/chat \
+  -H "Content-Type: application/json" \
+  -d '{"messages": [{"role": "user", "content": "Analyze trends for renewable energy"}]}'
+```
+
+---
+
+## 🚨 Troubleshooting
+
+### Common Issues & Solutions
+
+**"EXA_API_KEY required"**
+Get your key from: https://exa.ai
+
+**"FIRECRAWL_API_KEY required"**
+Get your key from: https://firecrawl.dev
+
+**"No LLM API key provided"**
+Set either `OPENAI_API_KEY` or `OPENROUTER_API_KEY`
+
+**"Port 3773 already in use"**
+Change port in `agent_config.json` or kill the process:
+
+```bash
+lsof -ti:3773 | xargs kill -9
+```
+
+**Docker build fails**
+
+```bash
+docker system prune -a
+docker-compose build --no-cache
+```
+
+---
+
+## 📊 Dependencies
+
+### Core Packages
+*   `bindu` - Agent deployment framework
+*   `agno` - AI agent framework
+*   `exa-py` - Exa semantic search API
+*   `firecrawl-py` - Firecrawl content extraction
+*   `openai` - OpenAI client
+*   `requests` - HTTP requests
+*   `rich` - Console output
+*   `python-dotenv` - Environment management
+
+### Development Packages
+*   `pytest` - Testing framework
+*   `ruff` - Code formatting/linting
+*   `pre-commit` - Git hooks
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Please follow these steps:
+
+1.  Fork the repository
+2.  Create a feature branch: `git checkout -b feature/improvement`
+3.  Make your changes following the code style
+4.  Add tests for new functionality
+5.  Commit with descriptive messages
+6.  Push to your fork
+7.  Open a Pull Request
+
+**Code Style:**
+*   Follow PEP 8 conventions
+*   Use type hints where possible
+*   Add docstrings for public functions
+*   Keep functions focused and small
+
+---
+
+## 📄 License
+MIT License - see LICENSE file for details.
+
+## 🙏 Credits & Acknowledgments
+*   **Developer:** Paras Chamoli
+*   **Framework:** Bindu - Agent deployment platform
+*   **Agent Framework:** Agno - AI agent toolkit
+*   **Search Engine:** Exa - Semantic search API
+*   **Content Extraction:** Firecrawl - Web scraping service
+
+## 🔗 Useful Links
+*   🌐 **Bindu Directory:** [bindus.directory](https://bindus.directory)
+*   📚 **Bindu Docs:** [docs.getbindu.com](https://docs.getbindu.com)
+*   🐙 **GitHub:** [github.com/ParasChamoli/media-trend-analysis-agent](https://github.com/ParasChamoli/media-trend-analysis-agent)
+*   💬 **Discord:** Bindu Community
+
+---
 
 <p align="center">
-  <a href="https://github.com/Paraschamoli/media-trend-analysis-agent">⭐ Star this repo</a> •
-  <a href="https://discord.gg/3w5zuYUuwt">💬 Join Discord</a> •
-  <a href="https://docs.getbindu.com">📚 Bindu Docs</a>
+  <strong>Built with ❤️ by Paras Chamoli</strong><br/>
+  <em>Transforming media intelligence with real-time AI analysis</em>
+</p>
+<p align="center">
+  <a href="https://github.com/ParasChamoli/media-trend-analysis-agent/stargazers">⭐ Star on GitHub</a> •
+  <a href="https://bindus.directory">🌐 Register on Bindu</a> •
+  <a href="https://github.com/ParasChamoli/media-trend-analysis-agent/issues">🐛 Report Issues</a>
 </p>
 
-<p align="center">
-  <em>From idea to Internet of Agents in minutes. 🌻🚀✨</em>
-</p>
-#   m e d i a - t r e n d - a n a l y s i s - a g e n t  
- 
+> **Note:** This agent follows the Bindu pattern with lazy initialization and secure API key handling. It boots without API keys and only fails at runtime if required keys are missing. Real-time trend analysis powered by Exa and Firecrawl.

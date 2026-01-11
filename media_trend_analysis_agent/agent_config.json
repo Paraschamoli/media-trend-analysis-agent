@@ -5,21 +5,18 @@
   "version": "1.0.0",
   "recreate_keys": false,
   "skills": [
-    {
-      "name": "media-trend-analysis-agent",
-      "path": "skills/agent_skill"
-    }
+    "skills/media-trend-analysis"
   ],
   "capabilities": {},
   "agent_trust": "low",
   "debug_mode": true,
   "debug_level": 2,
   "deployment": {
-    "url": "http://0.0.0.0:3773",
+    "url": "http://127.0.0.1:3773",
     "expose": true,
     "protocol_version": "1.0.0",
     "proxy_urls": [
-      "0.0.0.0"
+      "127.0.0.1"
     ],
     "cors_origins": [
       "*"
@@ -44,6 +41,11 @@
       "required": false
     },
     {
+      "key": "MODEL_NAME",
+      "description": "Model ID for OpenRouter (default: openai/gpt-4o)",
+      "required": false
+    },
+    {
       "key": "EXA_API_KEY",
       "description": "Exa API key for media search and trend analysis (required)",
       "required": true
@@ -52,6 +54,16 @@
       "key": "FIRECRAWL_API_KEY",
       "description": "Firecrawl API key for content scraping when search results are insufficient (required)",
       "required": true
+    },
+    {
+      "key": "DAYS_BACK",
+      "description": "Number of days to look back for trend analysis (default: 30)",
+      "required": false
+    },
+    {
+      "key": "MEM0_API_KEY",
+      "description": "Mem0 API key for memory operations",
+      "required": false
     }
   ]
 }
