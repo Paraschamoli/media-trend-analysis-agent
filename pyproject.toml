@@ -7,7 +7,7 @@ readme = "README.md"
 keywords = ['python', 'media-analysis', 'trend-tracking', 'exa', 'firecrawl', 'ai']
 requires-python = ">=3.12,<3.13"
 dependencies = [
-    "bindu==2026.1.7",
+    "bindu==2026.1.12",
     "agno>=2.2.0",
     "fastmcp>=2.11.0",
     "requests>=2.31.0",
@@ -35,7 +35,7 @@ classifiers = [
 [project.urls]
 Homepage = "https://Paraschamoli.github.io/media-trend-analysis-agent/"
 Repository = "https://github.com/Paraschamoli/media-trend-analysis-agent"
-Documentation = "https://Paraschamoli.github.io/media-trend-analysis-agent/"
+Documentation = "https://github.com/Paraschamoli/media-trend-analysis-agent#readme"
 Issues = "https://github.com/Paraschamoli/media-trend-analysis-agent/issues"
 
 [dependency-groups]
