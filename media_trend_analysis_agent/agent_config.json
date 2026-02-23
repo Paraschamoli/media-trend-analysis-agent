@@ -12,21 +12,15 @@
   "debug_mode": true,
   "debug_level": 2,
   "deployment": {
-    "url": "http://127.0.0.1:3773",
+    "url": "http://0.0.0.0:3773",
     "expose": true,
     "protocol_version": "1.0.0",
     "proxy_urls": [
-      "127.0.0.1"
+      "0.0.0.0"
     ],
     "cors_origins": [
       "*"
     ]
-  },
-  "storage": {
-    "type": "memory"
-  },
-  "scheduler": {
-    "type": "memory"
   },
   "num_history_sessions": 5,
   "environment_variables": [
