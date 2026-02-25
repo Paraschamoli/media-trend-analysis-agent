@@ -1,29 +1,24 @@
-# Media Trend Analysis and Monitoring Skill
-# AI-powered agent for tracking and analyzing emerging media trends, topics, and sentiment in real-time.
+# Media Trend Analysis Skill
+# AI-powered agent for analyzing emerging media trends and sentiment.
 
 # Basic Metadata
 id: media-trend-analysis-agent-v1
-name: media-trend-analysis-agent
+name: media-trend-analysis
 version: 1.0.0
 author: paras25619@gmail.com
 
 # Description
 description: |
-  An AI-powered media intelligence agent that tracks, analyzes, and reports on emerging trends,
-  viral topics, and public sentiment across digital platforms in real-time. Leverages Exa for
-  semantic search and Firecrawl for deep content extraction to provide comprehensive media
-  landscape analysis.
+  AI-powered agent that analyzes emerging media trends and sentiment.
+  Leverages Exa for semantic search and Firecrawl for content extraction to provide
+  comprehensive media landscape analysis.
 
 # Tags and Modes
 tags:
-  - media-analysis
+  - media-trend-analysis
   - trend-tracking
   - sentiment-analysis
   - real-time-monitoring
-  - viral-trends
-  - digital-platforms
-  - exa-search
-  - firecrawl
 
 input_modes:
   - text/plain
@@ -32,91 +27,47 @@ input_modes:
 output_modes:
   - text/plain
   - application/json
-  - text/markdown
 
 # Example Queries
 examples:
   - "What are the top 5 emerging media trends in the technology sector this week?"
   - "Analyze the sentiment and spread of the recent news about AI regulation."
-  - "Track the virality and key discussion points around the latest product launch from Company X."
-  - "Identify rising topics in political discourse across news and social media for the past 48 hours."
-  - "Provide a daily briefing on media trends related to climate change."
+  - "Track the virality and key discussion points around the latest product launch."
 
 # Detailed Capabilities
 capabilities_detail:
-  trend_analysis:
+  primary_capability:
     supported: true
-    methods:
-      - real_time_monitoring
-      - topic_clustering
-      - velocity_measurement
-      - cross_platform_correlation
-    platforms:
-      - news_websites
-      - social_media
-      - forums
-      - blogs
-    time_frame: "real_time_to_historical"
+    description: "Analyzes media trends and sentiment using Exa and Firecrawl integration"
+    features:
+      - "Semantic search with Exa for trend identification"
+      - "Content extraction with Firecrawl for deep analysis"
+      - "Sentiment analysis and pattern recognition"
+      - "Structured output with markdown reports"
+    limitations: "Focused on recent trends only, processing time depends on query scope"
 
-  sentiment_analysis:
-    supported: true
-    aspects:
-      - overall_sentiment
-      - emotion_detection
-      - stance_identification
-      - controversy_detection
-    granularity:
-      - document_level
-      - entity_level
-      - topic_level
-
-  source_monitoring:
-    supported: true
-    analysis_types:
-      - source_credibility_scoring
-      - geographic_bias_detection
-      - political_leaning_estimation
-      - influence_network_mapping
-
-  report_generation:
-    supported: true
-    styles:
-      - executive_briefing
-      - detailed_analyst_report
-      - real_time_alert
-      - periodic_digest
-    sections:
-      - executive_summary
-      - key_trends
-      - sentiment_breakdown
-      - influential_sources
-      - velocity_analysis
-      - predictive_insights
+  secondary_capability:
+    supported: false
+    planned_version: "2.0.0"
+    description: "Historical trend analysis and predictive modeling"
 
 # Requirements
 requirements:
   packages:
-    - agno>=2.2.0
-    - bindu>=2026.1.7
-    - openai>=2.11.0
-    - python-dotenv>=1.0.1
-    - exa-py>=2.0.0
-    - firecrawl-py>=1.0.0
-  system: []
+    - "agno"
+    - "exa-py"
+    - "firecrawl-py"
+    - "bindu"
+    - "python-dotenv"
+  system:
+    - "Python 3.12+"
   min_memory_mb: 512
-  external_services:
-    - Exa Search API
-    - Firecrawl API
-    - OpenAI API or OpenRouter API
 
 # Performance Metrics
 performance:
-  avg_processing_time_ms: 2000
-  avg_time_per_source_ms: 300
-  max_concurrent_requests: 8
+  avg_processing_time_ms: 20000
+  max_concurrent_requests: 10
   memory_per_request_mb: 512
-  timeout_seconds: 90
-  max_sources_per_query: 15
   scalability: horizontal
 
 # Tool Restrictions
@@ -126,205 +77,213 @@ allowed_tools:
   - Read
   - Search
   - Analyze
-  - Monitor
-  - Generate
 
 # Rich Documentation
 documentation:
   overview: |
-    This agent specializes in real-time media intelligence, monitoring digital platforms to identify
-    emerging trends, analyze public sentiment, and track the spread of topics. It combines Exa's
-    semantic search capabilities with Firecrawl's content extraction to provide a deep, nuanced
-    understanding of the media landscape.
+    AI-powered agent that analyzes emerging media trends using Exa semantic search
+    and Firecrawl content extraction. Provides real-time insights on trends, sentiment,
+    and media coverage across digital platforms.
+    Built on Agno framework with structured markdown output.
 
   use_cases:
     when_to_use:
-      - User requests analysis of current media trends or viral topics
-      - User needs sentiment analysis on a news event or public figure
-      - User wants to monitor brand or topic mentions across platforms
-      - User requires a briefing on emerging discourse in a specific domain
-      - User asks for tracking the spread and evolution of a narrative
+      - "News aggregation and trend analysis platforms"
+      - "Brand monitoring and sentiment tracking"
+      - "Media intelligence and reporting"
+      - "Trend forecasting and insights"
 
     when_not_to_use:
-      - Deep investigative research requiring historical context (use research agent)
-      - Simple Q&A without trend analysis (use general assistant)
-      - Fact-checking specific claims (use research agent)
-      - Mathematical or financial analysis (use specialized agents)
-      - Code generation or debugging (use programming agent)
+      - "Historical research requiring long-term data"
+      - "Real-time chat or conversational interfaces"
+      - "Low-latency requirements (< 10 seconds)"
 
   input_structure: |
-    Accepts monitoring and analysis queries with optional specifications:
+    JSON-RPC 2.0 message with user query in parts array.
 
+    Example:
     {
-      "query": "Topic, brand, or trend to monitor",
-      "analysis_type": "trend_analysis|sentiment_analysis|source_monitoring",
-      "time_frame": "realtime|last_24h|last_week|custom_range",
-      "platforms": ["news", "social_media", "all"],
-      "report_style": "executive|detailed|alert|digest",
-      "max_sources": 10
+      "jsonrpc": "2.0",
+      "method": "message/send",
+      "params": {
+        "message": {
+          "role": "user",
+          "parts": [
+            {
+              "kind": "text",
+              "text": "Analyze emerging media trends related to electric vehicles over the past 7 days."
+            }
+          ],
+          "kind": "message",
+          "messageId": "0c3e9e4f-57a9-41e8-b187-d93cb1e40401",
+          "contextId": "0c3e9e4f-57a9-41e8-b187-d93cb1e40402",
+          "taskId": "0c3e9e4f-57a9-41e8-b187-d93cb1e40403"
+        },
+        "configuration": {
+          "acceptedOutputModes": ["application/json"]
+        }
+      },
+      "id": "0c3e9e4f-57a9-41e8-b187-d93cb1e40404"
     }
 
-    Query constraints:
-    - Max query length: 300 characters
-    - Max sources per query: 15
-    - Timeout: 90 seconds
-    - Language: English primary
-
   output_format: |
-    Standard Media Analysis Report:
+    JSON-RPC 2.0 result with task history and artifacts containing markdown summary.
+
+    Success Response:
     {
-      "success": true,
-      "report": {
-        "title": "Analysis of [Topic]",
-        "executive_summary": "Brief overview of findings...",
-        "key_trends": [
-          {
-            "trend": "Trend description",
-            "velocity": "high/medium/low",
-            "sentiment": "positive/neutral/negative/mixed",
-            "key_sources": ["Source 1", "Source 2"]
-          }
-        ],
-        "sentiment_breakdown": {
-          "positive_percentage": 45,
-          "neutral_percentage": 30,
-          "negative_percentage": 25,
-          "dominant_emotions": ["anticipation", "trust"]
+      "jsonrpc": "2.0",
+      "id": "0c3e9e4f-57a9-41e8-b187-d93cb1e40404",
+      "result": {
+        "id": "0c3e9e4f-57a9-41e8-b187-d93cb1e40403",
+        "context_id": "0c3e9e4f-57a9-41e8-b187-d93cb1e40402",
+        "kind": "task",
+        "status": {
+          "state": "completed",
+          "timestamp": "2026-02-25T17:59:47.889596+00:00"
         },
-        "influential_sources": [
+        "history": [
           {
-            "source_name": "Source Name",
-            "url": "source_url",
-            "credibility_score": 0.85,
-            "reach_estimate": "high"
+            "kind": "message",
+            "role": "user",
+            "parts": [{"kind": "text", "text": "Analyze emerging media trends related to electric vehicles over the past 7 days."}]
+          },
+          {
+            "kind": "message",
+            "role": "assistant",
+            "parts": [{"kind": "text", "text": "# Media Trend Analysis Report..."}]
           }
         ],
-        "predictive_insights": "Potential developments and recommendations..."
-      },
-      "metadata": {
-        "query": "original_query",
-        "processing_time_ms": 3500,
-        "sources_analyzed": 12,
-        "time_frame_covered": "last_24_hours",
-        "confidence_score": 0.87
+        "artifacts": [
+          {
+            "name": "result",
+            "parts": [{"kind": "text", "text": "Markdown formatted analysis report"}]
+          }
+        ]
       }
     }
 
   error_handling:
-    - "No relevant trends found: Returns analysis of quiet period with context"
-    - "API rate limits: Queues requests or suggests adjusting time frame"
-    - "Unclear query: Asks for clarification on topic or scope"
-    - "Insufficient data: Suggests broadening query or changing time frame"
-    - "Conflicting sentiment: Presents breakdown and analyzes contributing factors"
+    - "API failures: Graceful degradation with partial results"
+    - "No relevant trends: Returns analysis of current media landscape"
+    - "Timeout: 30-second limit per query"
+    - "Invalid queries: Return error message with guidance"
+    - "Rate limits: Automatic retry with exponential backoff"
 
   examples:
-    - title: "Technology Sector Trend Briefing"
+    - title: "Electric Vehicles Trend Analysis"
       input:
-        query: "top emerging media trends in technology"
-        time_frame: "last_week"
-        report_style: "executive"
+        parts:
+          - kind: "text"
+            text: "Analyze emerging media trends related to electric vehicles over the past 7 days."
       output:
-        success: true
-        report:
-          title: "Weekly Tech Media Trends Digest"
-          executive_summary: "This week's discourse centered on AI ethics and quantum computing milestones..."
-          key_trends: [...]
-        metadata:
-          processing_time_ms: 4200
-          sources_analyzed: 14
+        text: |
+          # Media Trend Analysis Report
 
-    - title: "Brand Sentiment Alert"
-      input:
-        query: "Company X product launch sentiment"
-        analysis_type: "sentiment_analysis"
-        time_frame: "last_48h"
-        platforms: ["news", "social_media"]
-      output:
-        success: true
-        report:
-          title: "Sentiment Analysis: Company X Product Launch"
-          executive_summary: "Initial reception is positive with notable critique on pricing..."
-          sentiment_breakdown: {...}
-        metadata:
-          processing_time_ms: 3100
-          sources_analyzed: 18
+          ## Executive Summary
+          Over the past 7 days, electric vehicle (EV) media coverage has focused on declining growth, top brand mentions, shifts in consumer sentiment, and geographic variances in market performance. The analysis reveals a slowdown in EV registrations but owner satisfaction remains high, with Tesla leading the sentiment metrics.
+
+          ## Trend Analysis
+          ### Volume Metrics
+          - Peak discussion periods: February 13 - February 20, 2026
+          - Growth rate: Not available
+
+          ## Source Analysis
+          ### Top Sources
+          1. [EV Volumes](https://ev-volumes.com/)
+          2. [The EV Network](https://www.theevnetwork.com/news/february-shows-a-growing-car-market-overall-but-evs-fall-away-versus-last-year/)
+          3. [Carscoops](https://www.carscoops.com/2026/02/ev-sales-fall-2025-tesla-rivian-slowdown/)
+
+          ## Actionable Insights
+          1. Sentiment towards EVs remains positive despite a sales dip.
+             - Evidence: JD Power reports indicate highest satisfaction among BEV owners since 2021.
+             - Recommended action: PR campaigns should emphasize user satisfaction and future advancements to bolster confidence.
+
+          2. Geographic distribution indicates diversified performance.
+             - Evidence: Europe has shown growth while North America and China markets have slowed.
+             - Recommended action: Target marketing strategies regionally to align with local performance.
+
+          ## Future Predictions
+          1. Growth stabilization expected as infrastructure expands and new models launch.
+             - Supporting evidence: S&P Global noted the potential for a market rebound with infrastructure growth and new vehicle releases anticipated in 2026.
+
+          ## References
+          1. [EV Volumes - 2026 EV Statistics](https://ev-volumes.com/)
+          2. [The EV Network's February Market Report](https://www.theevnetwork.com/news/february-shows-a-growing-car-market-overall-but-evs-fall-away-versus-last-year/)
+          3. [AOL - EV Registrations Data](https://www.aol.com/lifestyle/ev-registrations-slip-first-time-144500444.html)
+          4. [Carscoops - US EV Market Analysis](https://www.carscoops.com/2026/02/ev-sales-fall-2025-tesla-rivian-slowdown/)
+          5. [JD Power - EVX Ownership Study](https://www.jdpower.com/business/press-releases/2026-us-electric-vehicle-experience-evx-ownership-study)
 
   best_practices:
     for_developers:
-      - "Use specific time frames ('last_48h') for more actionable real-time analysis"
-      - "Leverage platform filters to focus on relevant media types"
-      - "Combine trend detection with sentiment for holistic view"
-      - "Cache frequent baseline queries to track trend velocity"
-      - "Monitor API usage for Exa and Firecrawl services"
+      - "Use async/await for all agent operations"
+      - "Implement graceful degradation for partial failures"
+      - "Cache API responses to reduce latency"
+      - "Test with various query types and edge cases"
 
     for_orchestrators:
-      - "Route real-time media monitoring queries to this agent"
-      - "Chain with research agent for deep dives into identified trends"
-      - "Set appropriate timeouts based on query complexity"
-      - "Use for proactive alerting on sentiment shifts"
-      - "Consider data freshness requirements when configuring"
+      - "Route media trend queries to this skill"
+      - "Chain with research agent for deeper analysis"
+      - "Expect 15-30 second processing time per request"
+      - "Implement retry logic with exponential backoff"
+      - "Monitor Exa and Firecrawl API usage"
 
   installation: |
+    Install via uv package manager.
+
     Required packages:
-    pip install agno bindu openai python-dotenv
+    uv sync
 
     Environment variables:
-    OPENAI_API_KEY=your_openai_api_key
-    OPENROUTER_API_KEY=your_openrouter_api_key  # Alternative to OpenAI
-    EXA_API_KEY=your_exa_api_key                # Required for search
-    FIRECRAWL_API_KEY=your_firecrawl_api_key    # Required for content extraction
+    OPENAI_API_KEY=<your-key>
+    OPENROUTER_API_KEY=<your-key>
+    EXA_API_KEY=<your-key>
+    FIRECRAWL_API_KEY=<your-key>
+
+    Run:
+    uv run python -m media_trend_analysis_agent
 
   versioning:
     - version: "1.0.0"
       date: "2026-01-11"
-      changes: "Initial release with Exa and Firecrawl integration for real-time media analysis"
+      changes: "Initial release with Exa and Firecrawl integration"
+    - version: "1.1.0"
+      status: "planned"
+      changes: "Add historical trend analysis"
 
 # Assessment fields for skill negotiation
 assessment:
   keywords:
-    - media
-    - trend
-    - analysis
-    - monitor
-    - track
-    - sentiment
-    - viral
-    - topics
-    - real-time
-    - briefing
-    - alert
-    - exa
-    - firecrawl
+    - "media"
+    - "trend"
+    - "analysis"
+    - "monitor"
+    - "viral"
+    - "exa"
+    - "firecrawl"
 
   specializations:
-    - domain: technology_media
-      confidence_boost: 0.3
-    - domain: brand_monitoring
-      confidence_boost: 0.3
-    - domain: political_discourse
-      confidence_boost: 0.2
-    - domain: consumer_sentiment
+    - domain: "media-analysis"
+      confidence_boost: 0.8
+    - domain: "trend-tracking"
       confidence_boost: 0.2
 
   anti_patterns:
-    - "historical research"
-    - "fact checking"
-    - "investigative journalism"
-    - "code generation"
-    - "mathematical calculation"
-    - "personal opinion"
-    - "theoretical science"
+    - "Real-time chat conversations"
+    - "Historical research"
+    - "Image or video processing"
+    - "Code generation"
+    - "Mathematical calculation"
 
   complexity_indicators:
     simple:
-      - "current sentiment"
-      - "trending now"
-      - "basic monitoring"
+      - "Current sentiment on a topic"
+      - "Top trends today"
+      - "Basic media monitoring"
     medium:
-      - "multi-platform analysis"
-      - "sentiment over time"
-      - "identify key sources"
+      - "Multi-platform trend analysis"
+      - "Sentiment over time"
+      - "Identify key sources"
     complex:
-      - "predictive trend analysis"
-      - "narrative spread tracking"
-      - "cross-correlation of multiple topics"
+      - "Predictive trend analysis"
+      - "Cross-topic correlation"
+      - "Deep narrative tracking"

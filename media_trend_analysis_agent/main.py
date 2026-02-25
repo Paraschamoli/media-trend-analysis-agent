@@ -136,7 +136,7 @@ async def initialize_agent() -> None:
     exa_tools = ExaTools(
         api_key=exa_api_key,
         start_published_date=calculate_start_date(days_back),
-        type="keyword",
+        type="auto",
     )
 
     firecrawl_tools = FirecrawlTools(

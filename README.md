@@ -147,6 +147,149 @@ curl -X POST http://localhost:3773/chat \
   }'
 ```
 
+### Via JSON-RPC API
+
+The agent supports JSON-RPC 2.0 protocol for structured interactions.
+
+#### Send Message
+
+```bash
+curl --location 'http://localhost:3773' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer sk-or-v1-...' \
+--data '{
+  "jsonrpc": "2.0",
+  "method": "message/send",
+  "params": {
+    "message": {
+      "role": "user",
+      "parts": [
+        {
+          "kind": "text",
+          "text": "Analyze emerging media trends related to electric vehicles over the past 7 days. Include top topics, frequently mentioned brands, sentiment analysis, geographic distribution, leading media sources, and short-term trend outlook."
+        }
+      ],
+      "kind": "message",
+      "messageId": "0c3e9e4f-57a9-41e8-b187-d93cb1e40401",
+      "contextId": "0c3e9e4f-57a9-41e8-b187-d93cb1e40402",
+      "taskId": "0c3e9e4f-57a9-41e8-b187-d93cb1e40403"
+    },
+    "skillId": "media-trend-analysis-agent-v1",
+    "configuration": {
+      "acceptedOutputModes": [
+        "application/json"
+      ]
+    }
+  },
+  "id": "0c3e9e4f-57a9-41e8-b187-d93cb1e40404"
+}'
+```
+
+Response (Task Submitted):
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "0c3e9e4f-57a9-41e8-b187-d93cb1e40404",
+    "result": {
+        "id": "0c3e9e4f-57a9-41e8-b187-d93cb1e40403",
+        "context_id": "0c3e9e4f-57a9-41e8-b187-d93cb1e40402",
+        "kind": "task",
+        "status": {
+            "state": "submitted",
+            "timestamp": "2026-02-25T17:59:30.580021+00:00"
+        },
+        "history": [
+            {
+                "message_id": "0c3e9e4f-57a9-41e8-b187-d93cb1e40401",
+                "context_id": "0c3e9e4f-57a9-41e8-b187-d93cb1e40402",
+                "task_id": "0c3e9e4f-57a9-41e8-b187-d93cb1e40403",
+                "kind": "message",
+                "parts": [
+                    {
+                        "kind": "text",
+                        "text": "Analyze emerging media trends related to electric vehicles over the past 7 days. Include top topics, frequently mentioned brands, sentiment analysis, geographic distribution, leading media sources, and short-term trend outlook."
+                    }
+                ],
+                "role": "user"
+            }
+        ]
+    }
+}
+```
+
+#### Get Task Result
+
+```bash
+curl --location 'http://localhost:3773' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer sk-or-v1-...' \
+--data '{
+  "jsonrpc": "2.0",
+  "method": "tasks/get",
+  "params": {
+    "taskId": "0c3e9e4f-57a9-41e8-b187-d93cb1e40403"
+  },
+  "id": "0c3e9e4f-57a9-41e8-b187-d93cb1e40405"
+}'
+```
+
+Response (Task Completed):
+```json
+{
+    "jsonrpc": "2.0",
+    "id": "0c3e9e4f-57a9-41e8-b187-d93cb1e40405",
+    "result": {
+        "id": "0c3e9e4f-57a9-41e8-b187-d93cb1e40403",
+        "context_id": "0c3e9e4f-57a9-41e8-b187-d93cb1e40402",
+        "kind": "task",
+        "status": {
+            "state": "completed",
+            "timestamp": "2026-02-25T17:59:47.889596+00:00"
+        },
+        "history": [
+            {
+                "message_id": "0c3e9e4f-57a9-41e8-b187-d93cb1e40401",
+                "context_id": "0c3e9e4f-57a9-41e8-b187-d93cb1e40402",
+                "task_id": "0c3e9e4f-57a9-41e8-b187-d93cb1e40403",
+                "kind": "message",
+                "parts": [
+                    {
+                        "kind": "text",
+                        "text": "Analyze emerging media trends related to electric vehicles over the past 7 days. Include top topics, frequently mentioned brands, sentiment analysis, geographic distribution, leading media sources, and short-term trend outlook."
+                    }
+                ],
+                "role": "user"
+            },
+            {
+                "role": "assistant",
+                "parts": [
+                    {
+                        "kind": "text",
+                        "text": "# Media Trend Analysis Report\n\n## Executive Summary\nOver the past 7 days, electric vehicle (EV) media coverage has focused on declining growth, top brand mentions, shifts in consumer sentiment, and geographic variances in market performance. The analysis reveals a slowdown in EV registrations but owner satisfaction remains high, with Tesla leading the sentiment metrics.\n\n## Trend Analysis\n### Volume Metrics\n- Peak discussion periods: February 13 - February 20, 2026\n- Growth rate: Not available\n\n## Source Analysis\n### Top Sources\n1. [EV Volumes](https://ev-volumes.com/)\n2. [The EV Network](https://www.theevnetwork.com/news/february-shows-a-growing-car-market-overall-but-evs-fall-away-versus-last-year/)\n3. [Carscoops](https://www.carscoops.com/2026/02/ev-sales-fall-2025-tesla-rivian-slowdown/)\n\n## Actionable Insights\n1. Sentiment towards EVs remains positive despite a sales dip.\n   - Evidence: JD Power reports indicate highest satisfaction among BEV owners since 2021.\n   - Recommended action: PR campaigns should emphasize user satisfaction and future advancements to bolster confidence.\n\n2. Geographic distribution indicates diversified performance.\n   - Evidence: Europe has shown growth while North America and China markets have slowed.\n   - Recommended action: Target marketing strategies regionally to align with local performance.\n\n## Future Predictions\n1. Growth stabilization expected as infrastructure expands and new models launch.\n   - Supporting evidence: S&P Global noted the potential for a market rebound with infrastructure growth and new vehicle releases anticipated in 2026.\n\n## References\n1. [EV Volumes - 2026 EV Statistics](https://ev-volumes.com/)\n2. [The EV Network's February Market Report](https://www.theevnetwork.com/news/february-shows-a-growing-car-market-overall-but-evs-fall-away-versus-last-year/)\n3. [AOL - EV Registrations Data](https://www.aol.com/lifestyle/ev-registrations-slip-first-time-144500444.html)\n4. [Carscoops - US EV Market Analysis](https://www.carscoops.com/2026/02/ev-sales-fall-2025-tesla-rivian-slowdown/)\n5. [JD Power - EVX Ownership Study](https://www.jdpower.com/business/press-releases/2026-us-electric-vehicle-experience-evx-ownership-study)"
+                    }
+                ],
+                "kind": "message",
+                "message_id": "9af16fb9-e47f-47fe-a308-bf77a33b960f",
+                "task_id": "0c3e9e4f-57a9-41e8-b187-d93cb1e40403",
+                "context_id": "0c3e9e4f-57a9-41e8-b187-d93cb1e40402"
+            }
+        ],
+        "artifacts": [
+            {
+                "artifact_id": "6192e037-2cf5-4236-b9de-5118d03a1548",
+                "name": "result",
+                "parts": [
+                    {
+                        "kind": "text",
+                        "text": "# Media Trend Analysis Report\n\n## Executive Summary\nOver the past 7 days, electric vehicle (EV) media coverage has focused on declining growth, top brand mentions, shifts in consumer sentiment, and geographic variances in market performance. The analysis reveals a slowdown in EV registrations but owner satisfaction remains high, with Tesla leading the sentiment metrics.\n\n## Trend Analysis\n### Volume Metrics\n- Peak discussion periods: February 13 - February 20, 2026\n- Growth rate: Not available\n\n## Source Analysis\n### Top Sources\n1. [EV Volumes](https://ev-volumes.com/)\n2. [The EV Network](https://www.theevnetwork.com/news/february-shows-a-growing-car-market-overall-but-evs-fall-away-versus-last-year/)\n3. [Carscoops](https://www.carscoops.com/2026/02/ev-sales-fall-2025-tesla-rivian-slowdown/)\n\n## Actionable Insights\n1. Sentiment towards EVs remains positive despite a sales dip.\n   - Evidence: JD Power reports indicate highest satisfaction among BEV owners since 2021.\n   - Recommended action: PR campaigns should emphasize user satisfaction and future advancements to bolster confidence.\n\n2. Geographic distribution indicates diversified performance.\n   - Evidence: Europe has shown growth while North America and China markets have slowed.\n   - Recommended action: Target marketing strategies regionally to align with local performance.\n\n## Future Predictions\n1. Growth stabilization expected as infrastructure expands and new models launch.\n   - Supporting evidence: S&P Global noted the potential for a market rebound with infrastructure growth and new vehicle releases anticipated in 2026.\n\n## References\n1. [EV Volumes - 2026 EV Statistics](https://ev-volumes.com/)\n2. [The EV Network's February Market Report](https://www.theevnetwork.com/news/february-shows-a-growing-car-market-overall-but-evs-fall-away-versus-last-year/)\n3. [AOL - EV Registrations Data](https://www.aol.com/lifestyle/ev-registrations-slip-first-time-144500444.html)\n4. [Carscoops - US EV Market Analysis](https://www.carscoops.com/2026/02/ev-sales-fall-2025-tesla-rivian-slowdown/)\n5. [JD Power - EVX Ownership Study](https://www.jdpower.com/business/press-releases/2026-us-electric-vehicle-experience-evx-ownership-study)"
+                    }
+                ]
+            }
+        ]
+    }
+}
+```
+
 ### Sample Analysis Queries
 
 ```text
@@ -157,6 +300,54 @@ curl -X POST http://localhost:3773/chat \
 ```
 
 ### Expected Output Format
+
+The agent returns structured JSON-RPC responses with task status and artifacts containing the analysis report.
+
+#### Task Response Structure
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": "request_id",
+  "result": {
+    "id": "task_id",
+    "context_id": "context_id",
+    "kind": "task",
+    "status": {
+      "state": "completed",
+      "timestamp": "2026-02-25T17:59:47.889596+00:00"
+    },
+    "history": [
+      {
+        "kind": "message",
+        "role": "user",
+        "parts": [{"kind": "text", "text": "User query"}]
+      },
+      {
+        "kind": "message",
+        "role": "assistant",
+        "parts": [{"kind": "text", "text": "Analysis report in markdown"}]
+      }
+    ],
+    "artifacts": [
+      {
+        "artifact_id": "unique_id",
+        "name": "result",
+        "parts": [
+          {
+            "kind": "text",
+            "text": "# Media Trend Analysis Report\\n\\n## Executive Summary\\n..."
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+#### Analysis Report Format (Markdown Content)
+
+The `artifacts[0].parts[0].text` contains the detailed analysis report:
 
 ```markdown
 # Media Trend Analysis Report
