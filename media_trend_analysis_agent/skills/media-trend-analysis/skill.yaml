@@ -119,8 +119,11 @@ documentation:
           "contextId": "0c3e9e4f-57a9-41e8-b187-d93cb1e40402",
           "taskId": "0c3e9e4f-57a9-41e8-b187-d93cb1e40403"
         },
+        "skillId": "media-trend-analysis-agent-v1",
         "configuration": {
-          "acceptedOutputModes": ["application/json"]
+          "acceptedOutputModes": [
+            "application/json"
+          ]
         }
       },
       "id": "0c3e9e4f-57a9-41e8-b187-d93cb1e40404"
@@ -155,6 +158,7 @@ documentation:
         ],
         "artifacts": [
           {
+            "artifact_id": "unique_id",
             "name": "result",
             "parts": [{"kind": "text", "text": "Markdown formatted analysis report"}]
           }
@@ -256,10 +260,6 @@ assessment:
     - "media"
     - "trend"
     - "analysis"
-    - "monitor"
-    - "viral"
-    - "exa"
-    - "firecrawl"
 
   specializations:
     - domain: "media-analysis"
