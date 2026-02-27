@@ -31,7 +31,7 @@ FROM raahulrahl/bindu-runtime-base:latest
 # OCI labels
 LABEL org.opencontainers.image.title="media-trend-analysis-agent"
 LABEL org.opencontainers.image.description="An AI agent that tracks and analyzes emerging media trends, topics, and sentiment across digital platforms in real time."
-LABEL org.opencontainers.image.authors="Paras Chamoli <paras25619@gmail.com>"
+LABEL org.opencontainers.image.authors="Paras Chamoli <paras@getbindu.com>"
 LABEL org.opencontainers.image.version="1.0.0"
 LABEL org.opencontainers.image.source="https://github.com/Paraschamoli/media-trend-analysis-agent"
 LABEL org.opencontainers.image.licenses="MIT"
