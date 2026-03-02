@@ -16,12 +16,12 @@ import os
 import sys
 import traceback
 from datetime import datetime, timedelta
+from logging import getLogger
 from pathlib import Path
 from textwrap import dedent
-from typing import Any
+from typing import Any, cast
 
 from agno.agent import Agent
-from agno.models.openai import OpenAIChat
 from agno.models.openrouter import OpenRouter
 from agno.tools.exa import ExaTools
 from agno.tools.firecrawl import FirecrawlTools
@@ -33,6 +33,8 @@ load_dotenv()
 
 # Global agent instance
 agent: Agent | None = None
+
+_logger = getLogger(__name__)
 _initialized = False
 _init_lock = asyncio.Lock()
 
@@ -54,20 +56,14 @@ class FirecrawlKeyError(ValueError):
 def load_config() -> dict:
     """Load agent configuration from project root."""
     # Try multiple possible locations for agent_config.json
-    possible_paths = [
-        Path(__file__).parent.parent / "agent_config.json",  # Project root
-        Path(__file__).parent / "agent_config.json",  # Same directory
-        Path.cwd() / "agent_config.json",  # Current working directory
-    ]
+    config_path = Path(__file__).parent / "agent_config.json"
 
-    for config_path in possible_paths:
-        if config_path.exists():
-            try:
-                with open(config_path) as f:
-                    return json.load(f)
-            except Exception as e:
-                print(f"⚠️  Error reading {config_path}: {e}")
-                continue
+    if config_path.exists():
+        try:
+            with open(config_path) as f:
+                return cast(dict[str, Any], json.load(f))
+        except (OSError, json.JSONDecodeError) as exc:
+            _logger.warning("Failed to load config from %s", config_path, exc_info=exc)
 
     # If no config found, create a minimal default
     return {
@@ -82,11 +78,9 @@ def load_config() -> dict:
             "cors_origins": ["*"],
         },
         "environment_variables": [
-            {"key": "OPENAI_API_KEY", "description": "OpenAI API key", "required": False},
             {"key": "OPENROUTER_API_KEY", "description": "OpenRouter API key", "required": False},
             {"key": "EXA_API_KEY", "description": "Exa API key", "required": True},
             {"key": "FIRECRAWL_API_KEY", "description": "Firecrawl API key", "required": True},
-            {"key": "MODEL_NAME", "description": "Model ID for OpenRouter", "required": False},
         ],
     }
 
@@ -96,7 +90,6 @@ async def initialize_agent() -> None:
     global agent
 
     # Get API keys from environment
-    openai_api_key = os.getenv("OPENAI_API_KEY")
     openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
     exa_api_key = os.getenv("EXA_API_KEY")
     firecrawl_api_key = os.getenv("FIRECRAWL_API_KEY")
@@ -112,10 +105,7 @@ async def initialize_agent() -> None:
         raise FirecrawlKeyError(error_msg)
 
     # Model selection logic
-    if openai_api_key:
-        model = OpenAIChat(id="gpt-4o", api_key=openai_api_key)
-        print("✅ Using OpenAI GPT-4o")
-    elif openrouter_api_key:
+    if openrouter_api_key:
         model = OpenRouter(
             id=model_name,
             api_key=openrouter_api_key,
@@ -277,8 +267,6 @@ def main():
     args = parser.parse_args()
 
     # Set environment variables if provided via CLI
-    if args.openai_api_key:
-        os.environ["OPENAI_API_KEY"] = args.openai_api_key
     if args.openrouter_api_key:
         os.environ["OPENROUTER_API_KEY"] = args.openrouter_api_key
     if args.exa_api_key:

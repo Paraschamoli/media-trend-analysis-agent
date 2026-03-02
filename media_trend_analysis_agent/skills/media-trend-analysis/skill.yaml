@@ -1,5 +1,5 @@
 # Media Trend Analysis Skill
-# AI-powered agent for analyzing emerging media trends and sentiment.
+# Agent for analyzing media trends using Exa search and Firecrawl content extraction.
 
 # Basic Metadata
 id: media-trend-analysis-agent-v1
@@ -9,47 +9,44 @@ author: paras@getbindu.com
 
 # Description
 description: |
-  AI-powered agent that analyzes emerging media trends and sentiment.
-  Leverages Exa for semantic search and Firecrawl for content extraction to provide
-  comprehensive media landscape analysis.
+  Agent that analyzes media trends using Exa semantic search and Firecrawl content extraction.
+  Searches recent content (configurable lookback period, default 30 days), extracts key themes,
+  identifies sources, and generates structured markdown reports.
 
 # Tags and Modes
 tags:
   - media-trend-analysis
   - trend-tracking
-  - sentiment-analysis
-  - real-time-monitoring
+  - content-analysis
 
 input_modes:
-  - text/plain
   - application/json
 
 output_modes:
-  - text/plain
   - application/json
 
 # Example Queries
 examples:
-  - "What are the top 5 emerging media trends in the technology sector this week?"
-  - "Analyze the sentiment and spread of the recent news about AI regulation."
-  - "Track the virality and key discussion points around the latest product launch."
+  - "Analyze the current media trends around generative AI over the past 7 days."
+  - "Track and analyze emerging media trends related to electric vehicle companies in the last 5 days."
+  - "What are the top emerging topics in technology sector this week?"
 
 # Detailed Capabilities
 capabilities_detail:
   primary_capability:
     supported: true
-    description: "Analyzes media trends and sentiment using Exa and Firecrawl integration"
+    description: "Searches and analyzes media content using Exa and Firecrawl"
     features:
-      - "Semantic search with Exa for trend identification"
-      - "Content extraction with Firecrawl for deep analysis"
-      - "Sentiment analysis and pattern recognition"
-      - "Structured output with markdown reports"
-    limitations: "Focused on recent trends only, processing time depends on query scope"
+      - "Semantic search via ExaTools with configurable date range"
+      - "Content extraction via FirecrawlTools when search results are insufficient"
+      - "Structured markdown report generation with sections: Executive Summary, Trend Analysis, Source Analysis, Actionable Insights, Future Predictions, References"
+      - "Datetime context included in analysis"
+    limitations: "Date range limited by DAYS_BACK environment variable (default 30 days). Firecrawl scraping only triggered when fewer than 2 sources found. No built-in sentiment scoring or virality metrics."
 
   secondary_capability:
     supported: false
-    planned_version: "2.0.0"
-    description: "Historical trend analysis and predictive modeling"
+    planned_version: null
+    description: "Not supported by code"
 
 # Requirements
 requirements:
@@ -65,38 +62,34 @@ requirements:
 
 # Performance Metrics
 performance:
-  avg_processing_time_ms: 20000
-  max_concurrent_requests: 10
-  memory_per_request_mb: 512
-  scalability: horizontal
+  avg_processing_time_ms: null
+  max_concurrent_requests: null
+  memory_per_request_mb: null
+  scalability: null
 
 # Tool Restrictions
 allowed_tools:
   - ExaTools
   - FirecrawlTools
-  - Read
-  - Search
-  - Analyze
 
 # Rich Documentation
 documentation:
   overview: |
-    AI-powered agent that analyzes emerging media trends using Exa semantic search
-    and Firecrawl content extraction. Provides real-time insights on trends, sentiment,
-    and media coverage across digital platforms.
-    Built on Agno framework with structured markdown output.
+    Agent that analyzes media trends using Exa semantic search and Firecrawl content extraction.
+    Uses Agno framework with OpenAI GPT-4o or OpenRouter models.
+    Generates structured markdown reports with trend analysis, source identification, and insights.
+    Supports configurable lookback period via DAYS_BACK environment variable (default 30 days).
 
   use_cases:
     when_to_use:
-      - "News aggregation and trend analysis platforms"
-      - "Brand monitoring and sentiment tracking"
-      - "Media intelligence and reporting"
-      - "Trend forecasting and insights"
+      - "Analyzing recent media trends on specific topics"
+      - "Identifying key sources and themes in media coverage"
+      - "Generating structured trend reports with actionable insights"
 
     when_not_to_use:
-      - "Historical research requiring long-term data"
-      - "Real-time chat or conversational interfaces"
-      - "Low-latency requirements (< 10 seconds)"
+      - "Real-time streaming analysis"
+      - "Historical data beyond configured lookback period"
+      - "Automated sentiment scoring (agent provides qualitative analysis only)"
 
   input_structure: |
     JSON-RPC 2.0 message with user query in parts array.
@@ -167,11 +160,10 @@ documentation:
     }
 
   error_handling:
-    - "API failures: Graceful degradation with partial results"
-    - "No relevant trends: Returns analysis of current media landscape"
-    - "Timeout: 30-second limit per query"
-    - "Invalid queries: Return error message with guidance"
-    - "Rate limits: Automatic retry with exponential backoff"
+    - "Missing EXA_API_KEY: Raises ExaKeyError with message directing to https://exa.ai"
+    - "Missing FIRECRAWL_API_KEY: Raises FirecrawlKeyError with message directing to https://firecrawl.dev"
+    - "Missing LLM API key: Raises ValueError if neither OPENAI_API_KEY nor OPENROUTER_API_KEY provided"
+    - "Agent errors: Propagated from Agno framework and underlying tools"
 
   examples:
     - title: "Electric Vehicles Trend Analysis"
@@ -219,40 +211,36 @@ documentation:
 
   best_practices:
     for_developers:
-      - "Use async/await for all agent operations"
-      - "Implement graceful degradation for partial failures"
-      - "Cache API responses to reduce latency"
-      - "Test with various query types and edge cases"
+      - "Agent uses async initialization with lock to prevent race conditions"
+      - "Handler function performs lazy initialization on first call"
+      - "Set DAYS_BACK environment variable to control lookback period (default 30 days)"
+      - "Choose LLM provider via OPENAI_API_KEY or OPENROUTER_API_KEY + MODEL_NAME"
 
     for_orchestrators:
-      - "Route media trend queries to this skill"
-      - "Chain with research agent for deeper analysis"
-      - "Expect 15-30 second processing time per request"
-      - "Implement retry logic with exponential backoff"
-      - "Monitor Exa and Firecrawl API usage"
+      - "Route media trend analysis queries to this skill"
+      - "Task follows async pattern: submit returns 'submitted' state, poll with tasks/get until 'completed'"
+      - "Ensure EXA_API_KEY and FIRECRAWL_API_KEY are provided"
+      - "Monitor API usage for Exa and Firecrawl services"
 
   installation: |
-    Install via uv package manager.
+    Install dependencies and run agent.
 
-    Required packages:
-    uv sync
-
-    Environment variables:
-    OPENAI_API_KEY=<your-key>
-    OPENROUTER_API_KEY=<your-key>
-    EXA_API_KEY=<your-key>
-    FIRECRAWL_API_KEY=<your-key>
+    Required environment variables:
+    - EXA_API_KEY (required)
+    - FIRECRAWL_API_KEY (required)
+    - OPENAI_API_KEY or OPENROUTER_API_KEY (one required)
+    - MODEL_NAME (optional, default: openai/gpt-4o)
+    - DAYS_BACK (optional, default: 30)
 
     Run:
-    uv run python -m media_trend_analysis_agent
+    python -m media_trend_analysis_agent
+
+    Server runs on http://127.0.0.1:3773 by default (configurable via agent_config.json)
 
   versioning:
     - version: "1.0.0"
       date: "2026-01-11"
       changes: "Initial release with Exa and Firecrawl integration"
-    - version: "1.1.0"
-      status: "planned"
-      changes: "Add historical trend analysis"
 
 # Assessment fields for skill negotiation
 assessment:
@@ -260,30 +248,33 @@ assessment:
     - "media"
     - "trend"
     - "analysis"
+    - "emerging"
+    - "coverage"
+    - "sources"
 
   specializations:
     - domain: "media-analysis"
       confidence_boost: 0.8
     - domain: "trend-tracking"
-      confidence_boost: 0.2
+      confidence_boost: 0.7
 
   anti_patterns:
-    - "Real-time chat conversations"
-    - "Historical research"
-    - "Image or video processing"
-    - "Code generation"
-    - "Mathematical calculation"
+    - "Real-time streaming or chat"
+    - "Historical data beyond DAYS_BACK period"
+    - "Image or video content analysis"
+    - "Code generation or debugging"
+    - "Mathematical calculations"
+    - "Automated sentiment scoring (provides qualitative analysis only)"
 
   complexity_indicators:
     simple:
-      - "Current sentiment on a topic"
-      - "Top trends today"
-      - "Basic media monitoring"
+      - "Analyze media trends on [topic]"
+      - "What are emerging trends in [domain]"
+      - "Identify key sources discussing [topic]"
     medium:
-      - "Multi-platform trend analysis"
-      - "Sentiment over time"
-      - "Identify key sources"
+      - "Track media trends across multiple platforms"
+      - "Compare coverage between different topics"
+      - "Identify influencers and authoritative sources"
     complex:
-      - "Predictive trend analysis"
-      - "Cross-topic correlation"
-      - "Deep narrative tracking"
+      - "Multi-topic correlation analysis (agent attempts but may require multiple queries)"
+      - "Long-term trend forecasting (limited by lookback period)"
