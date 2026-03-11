@@ -2,8 +2,8 @@ openapi: 3.1.0
 info:
   title: Media Trend Analysis Agent API
   description: |
-    An AI agent that analyzes emerging media trends using Exa semantic search and Firecrawl 
-    content extraction. Searches recent content (configurable lookback period, default 30 days), 
+    An AI agent that analyzes emerging media trends using Exa semantic search and Firecrawl
+    content extraction. Searches recent content (configurable lookback period, default 30 days),
     extracts key themes, identifies sources, and generates structured markdown reports.
 
     Implements the A2A Protocol with JSON-RPC 2.0 methods for agent communication, task
